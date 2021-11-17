@@ -8,8 +8,6 @@
 		</style>
 	</head>
 	<body>
-		<p>helo</p>
-		
 		<script src="js/three.js"></script>
 		<script>
 			// Our Javascript will go here.
@@ -30,7 +28,12 @@
 
 			function animate() {
 				requestAnimationFrame( animate );
+
+				cube.rotation.x += 1;
+				cube.rotation.y += 1;
+
 				renderer.render( scene, camera );
+
 			}
 			animate();
 		</script>
