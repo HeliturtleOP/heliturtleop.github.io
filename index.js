@@ -13,16 +13,22 @@ const scene = new THREE.Scene();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
-            loader.load('./models/record.gltf', function (gltf){
-                scene.add(gltf.scene)
-            })
+            //loader.load('./models/record.gltf', function (gltf){
+                //record.Mesh.setSize(1);
+                //scene.add(gltf.scene);
+            //}) 
+            const RecordData = await Promise.all([loader.loadAsync('./models/record.gltf')]) ;
+
+            const Record = RecordData.scene;
+
+            scene.add(Record);
 
             const light = new THREE.AmbientLight( 0x404040 ); // soft white light
             scene.add( light );
 
 			const geometry = new THREE.BoxGeometry();
 			const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			const cube = new THREE.Mesh( geometry, material );
+			const cube = new THREE.Mesh(geometry,material);
 			//scene.add( cube );
 
 			camera.position.z = 500;
@@ -40,8 +46,8 @@ const scene = new THREE.Scene();
 
 
 
-				cube.rotation.x += 0.01;
-				cube.rotation.y += 0.01;
+				//record.rotation.x += 0.01;
+				//record.rotation.y += 0.01;
 
                 renderer.outputEncoding = THREE.sRGBEncoding;
 				renderer.render( scene, camera );
