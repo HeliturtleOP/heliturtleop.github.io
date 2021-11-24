@@ -4,7 +4,7 @@ import { OrbitControls } from './three.js-master/examples/jsm/controls/OrbitCont
 
 			const loader = new GLTFLoader();
 
-
+const area = document.querySelector('scene-container');
 
 			const scene = new THREE.Scene();
 			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -15,8 +15,17 @@ import { OrbitControls } from './three.js-master/examples/jsm/controls/OrbitCont
 
  var record = new THREE.Object3D;
 
-loader.load( './models/record.gltf', function ( gltf ) {	
+loader.load( './models/test.glb', function ( gltf ) {	
 	record = gltf.scene.children[0];
+	
+	record.scale.set(1,1,1)
+	record = scene.add(record)
+
+});
+
+loader.load( './models/test.glb', function ( gltf ) {	
+	record = gltf.scene.children[0];
+	record.position.set(0,0,0.04)
 	record.scale.set(1,1,1)
 	record = scene.add(record)
 
@@ -35,11 +44,12 @@ console.log(record);
             const light = new THREE.AmbientLight( 0x404040 ); // soft white light
             scene.add( light );
 			
-            const controls = new OrbitControls( camera, renderer.domElement );
+            //const controls = new OrbitControls( camera, renderer.domElement );
 
             //controls.update() must be called after any manual changes to the camera's transform
-            camera.position.set( 0, 0, 5 );
-            controls.update();
+            camera.position.set( -6, 0, 3 );
+			camera.rotation.set(0,-1,0)
+            //controls.update();
 
 
 const raycaster = new THREE.Raycaster();
@@ -55,6 +65,8 @@ function onMouseMove( event ) {
 
 }
 
+var obj;
+
 function render() {
 
 	// update the picking ray with the camera and mouse position
@@ -63,19 +75,32 @@ function render() {
 	// calculate objects intersecting the picking ray
 	const intersects = raycaster.intersectObjects( scene.children );
 
+
+
 	for ( let i = 0; i < intersects.length; i ++ ) {
 
 		//intersects[ i ].object.material.color.set( 0xff0000 );
-		console.log("aaaaa")
-		record.rotation.x += 0.01;
-		record.rotation.y += 0.01;
-	}
+		//console.log("aaaaa")
+		if (intersects[i]!= null){
+			obj = intersects[i].object;
+		}
 
-	renderer.render( scene, camera );
+		intersects[i].object.position.lerp(new THREE.Vector3(-1.2, 0,intersects[i].object.position.z), 0.05);
+		//window.addEventListener('click', event => {
+		//	console.log("aaaaa")
+		//  });
+		return;
+	}
+if (obj!= null)
+obj.position.lerp(new THREE.Vector3(0,0,obj.position.z), 0.05);
+	
 
 }
 
+
+
 window.addEventListener( 'mousemove', onMouseMove, false );
+//window.addEventListener('mousedown', onmousedown, false);
 
 
 
@@ -88,6 +113,7 @@ window.addEventListener( 'mousemove', onMouseMove, false );
 				//record.rotation.y += 0.01;
 
                 renderer.outputEncoding = THREE.sRGBEncoding;
+				renderer.render( scene, camera );
 				render();				
 				
 			};
