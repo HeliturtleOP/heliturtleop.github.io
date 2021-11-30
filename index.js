@@ -2,6 +2,7 @@ import * as THREE from './three.js-master/build/three.module.js';
 import { GLTFLoader } from './three.js-master/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from './three.js-master/examples/jsm/controls/OrbitControls.js';
 import {loadModel} from './modelLoader.js';
+import { TextGeometry } from './three.js-master/build/three.module.js';
 
 			//const loader = new GLTFLoader();
 
@@ -53,10 +54,10 @@ init();
             //const controls = new OrbitControls( camera, renderer.domElement );
 
             //controls.update() must be called after any manual changes to the camera's transform
-            camera.position.set( -3, 0, 2);
-			camera.rotation.set(0, -0.3926991 ,0)
+            camera.position.set( -3, 0, 0.3);
+			camera.rotation.set(0, -0.785398 ,0)
+			
             //controls.update();
-
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
@@ -90,19 +91,19 @@ function render() {
 
 	// calculate objects intersecting the picking ray
 	const intersects = raycaster.intersectObjects( scene.children );
-
-
 	
  if (intersects[0] != null){
 	 obj = intersects[0].object;
 	 //console.log('touching', obj)
 
-
+	 document.getElementById("info").innerHTML = obj.name;
 
 	 obj.selected = true;
 
 	 if (obj.name == "Shelf"){
+		document.getElementById("info").innerHTML = '';
 		obj.selected = false;
+		obj = null;
 	}
 
 	if (last!= null)
@@ -116,9 +117,11 @@ function render() {
 
 
  }else{
+	document.getElementById("info").innerHTML = '';
 	//console.log('nottouching', obj)
 	if (obj != null){
 		obj.selected = false;
+		obj = null;
 		//obj.position.lerp(new THREE.Vector3(0,0,obj.position.z), 0.05);
 	}
  }
@@ -127,10 +130,16 @@ function render() {
 	var record = records.children[i];
 	//console.log(i, record.selected)
 	if (record.selected != undefined){
-		if (record.selected == false)
-		record.position.lerp(new THREE.Vector3(0,0,record.position.z), 0.05);
-		if (record.selected == true)
-		record.position.lerp(new THREE.Vector3(-1.2, 0, record.position.z), 0.05);
+		if (record.selected == false){
+
+			record.position.lerp(new THREE.Vector3(0,0,record.position.z), 0.05);
+		}
+		
+		if (record.selected == true){
+			
+			record.position.lerp(new THREE.Vector3(-0.6, 0, record.position.z), 0.05);
+		}
+
 	}
 }
 
