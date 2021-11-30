@@ -19,7 +19,7 @@ const area = document.querySelector('scene-container');
 var records;
 
 async function init(){
-	const model = await loadModel('./models/multiTest.glb');
+	const model = await loadModel('./models/records.glb');
 
 	//console.log(model.scene.children[0]);
 
@@ -47,14 +47,14 @@ init();
 
 //console.log(GetData('./models/record.gltf'))
 
-            const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+            const light = new THREE.HemisphereLight( 0xFFFF80, 0x4040FF, 1.0); // soft white light
             scene.add( light );
 			
             //const controls = new OrbitControls( camera, renderer.domElement );
 
             //controls.update() must be called after any manual changes to the camera's transform
-            camera.position.set( -6, 0, 3 );
-			camera.rotation.set(0,-1,0)
+            camera.position.set( -3, 0, 2);
+			camera.rotation.set(0, -0.3926991 ,0)
             //controls.update();
 
 
@@ -74,6 +74,13 @@ function onMouseMove( event ) {
 var obj;
 var last;
 
+window.addEventListener('click', event => {
+	if (obj!= null){
+		console.log(obj.name)
+		window.location.href = "./" + obj.name + ".html";
+	}
+  });
+
 function render() {
 
 //console.log(records);
@@ -89,7 +96,15 @@ function render() {
  if (intersects[0] != null){
 	 obj = intersects[0].object;
 	 //console.log('touching', obj)
+
+
+
 	 obj.selected = true;
+
+	 if (obj.name == "Shelf"){
+		obj.selected = false;
+	}
+
 	if (last!= null)
 	if (last != obj){
 		last.selected = false;
@@ -110,7 +125,7 @@ function render() {
 
  for (let i = 0; i < records.children.length; i ++ ) {
 	var record = records.children[i];
-	console.log(i, record.selected)
+	//console.log(i, record.selected)
 	if (record.selected != undefined){
 		if (record.selected == false)
 		record.position.lerp(new THREE.Vector3(0,0,record.position.z), 0.05);
