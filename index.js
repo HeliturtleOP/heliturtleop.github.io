@@ -72,9 +72,11 @@ function onMouseMove( event ) {
 }
 
 var obj;
-var lst;
+var last;
 
 function render() {
+
+//console.log(records);
 
 	// update the picking ray with the camera and mouse position
 	raycaster.setFromCamera( mouse, camera );
@@ -82,28 +84,63 @@ function render() {
 	// calculate objects intersecting the picking ray
 	const intersects = raycaster.intersectObjects( scene.children );
 
-	for ( let i = 0; i < intersects.length; i ++ ) {
+
+	
+ if (intersects[0] != null){
+	 obj = intersects[0].object;
+	 //console.log('touching', obj)
+	 obj.selected = true;
+	if (last!= null)
+	if (last != obj){
+		last.selected = false;
+	}
+
+	last = obj;
+
+
+
+
+ }else{
+	//console.log('nottouching', obj)
+	if (obj != null){
+		obj.selected = false;
+		//obj.position.lerp(new THREE.Vector3(0,0,obj.position.z), 0.05);
+	}
+ }
+
+ for (let i = 0; i < records.children.length; i ++ ) {
+	var record = records.children[i];
+	console.log(i, record.selected)
+	if (record.selected != undefined){
+		if (record.selected == false)
+		record.position.lerp(new THREE.Vector3(0,0,record.position.z), 0.05);
+		if (record.selected == true)
+		record.position.lerp(new THREE.Vector3(-1.2, 0, record.position.z), 0.05);
+	}
+}
+
+	//for ( let i = 0; i < intersects.length; i ++ ) {
 
 		//intersects[ i ].object.material.color.set( 0xff0000 );
 		//console.log("aaaaa")
 		
-		
+		//console.log(i, 'hit', intersects[i]);
 
-		if (intersects[i]!= null){
-			obj = intersects[i].object;
-			obj.move = true;
+		//if (intersects[i]!= null){
+			//obj = intersects[i].object;
+			//obj.move = true;
 
-			for (let n = 0; n < obj.parent.children.length; n ++){
-				if (obj.parent.children[n].move === false)
-				obj.parent.children[n].position.lerp(new THREE.Vector3(0,0,obj.parent.children[n].position.z), 0.05);
-				else
-				obj.parent.children[n].position.lerp(new THREE.Vector3(-1.2, 0, obj.parent.children[n].position.z), 0.05);
-			}	
+			//for (let n = 0; n < obj.parent.children.length; n ++){
+				//if (obj.parent.children[n].move === false)
+				//obj.parent.children[n].position.lerp(new THREE.Vector3(0,0,obj.parent.children[n].position.z), 0.05);
+				//obj.parent.children[n].position.lerp(new THREE.Vector3(-1.2, 0, obj.parent.children[n].position.z), 0.05);else
+				//obj.parent.children[n].position.lerp(new THREE.Vector3(-1.2, 0, obj.parent.children[n].position.z), 0.05);
+			//}	
 
 
-			console.log(obj.move)
+			//console.log(obj.move)
 			//return;
-		}
+		//}
 
 		
 		
@@ -111,18 +148,18 @@ function render() {
 		//	console.log("aaaaa")
 		//  });
 		
-	}
+	//}
 
-	if (obj!= null){
-		obj.move = false;
-		console.log(obj.move)
+	//if (obj!= null){
+		//obj.move = false;
+		//console.log(obj.move)
 		//obj.position.lerp(new THREE.Vector3(-1.2, 0, obj.position.z), 0.05);
 	
-		for (let n = 0; n < obj.parent.children.length; n ++){
-			obj.parent.children[n].position.lerp(new THREE.Vector3(0,0,obj.parent.children[n].position.z), 0.05);
-		} 
+		//for (let n = 0; n < obj.parent.children.length; n ++){
+			//obj.parent.children[n].position.lerp(new THREE.Vector3(0,0,obj.parent.children[n].position.z), 0.05);
+		//} 
 
-}
+//}
 
 	
 
