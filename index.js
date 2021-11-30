@@ -1,8 +1,9 @@
 import * as THREE from './three.js-master/build/three.module.js';
 import { GLTFLoader } from './three.js-master/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from './three.js-master/examples/jsm/controls/OrbitControls.js';
+import {loadModel} from './modelLoader.js';
 
-			const loader = new GLTFLoader();
+			//const loader = new GLTFLoader();
 
 const area = document.querySelector('scene-container');
 
@@ -13,29 +14,34 @@ const area = document.querySelector('scene-container');
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
- var record = new THREE.Object3D;
+			//loadModel();
 
-loader.load( './models/test.glb', function ( gltf ) {	
-	record = gltf.scene.children[0];
+var records;
+
+async function init(){
+	const model = await loadModel('./models/multiTest.glb');
+
+	//console.log(model.scene.children[0]);
+
+	records = model.scene;
+
+	console.log(records.children[0]);
+
+	scene.add(model.scene);
+}
+
+init();
+
+ //var record = loadModel('./models/test.glb');
+ //scene.add(record);
+
+//loader.load( './models/test.glb', function ( gltf ) {	
+//	record = gltf.scene.children[0];
 	
-	record.scale.set(1,1,1)
-	record = scene.add(record)
+//	record.scale.set(1,1,1)
+//	record = scene.add(record)
 
-});
-
-loader.load( './models/test.glb', function ( gltf ) {	
-	record = gltf.scene.children[0];
-	record.position.set(0,0,0.04)
-	record.scale.set(1,1,1)
-	record = scene.add(record)
-
-});
-
-console.log(record.scale)	
-
-record.updateMatrix();
-
-console.log(record);
+//});
 
 //scene.add(data)
 
@@ -66,6 +72,7 @@ function onMouseMove( event ) {
 }
 
 var obj;
+var lst;
 
 function render() {
 
@@ -75,24 +82,48 @@ function render() {
 	// calculate objects intersecting the picking ray
 	const intersects = raycaster.intersectObjects( scene.children );
 
-
-
 	for ( let i = 0; i < intersects.length; i ++ ) {
 
 		//intersects[ i ].object.material.color.set( 0xff0000 );
 		//console.log("aaaaa")
+		
+		
+
 		if (intersects[i]!= null){
 			obj = intersects[i].object;
+			obj.move = true;
+
+			for (let n = 0; n < obj.parent.children.length; n ++){
+				if (obj.parent.children[n].move === false)
+				obj.parent.children[n].position.lerp(new THREE.Vector3(0,0,obj.parent.children[n].position.z), 0.05);
+				else
+				obj.parent.children[n].position.lerp(new THREE.Vector3(-1.2, 0, obj.parent.children[n].position.z), 0.05);
+			}	
+
+
+			console.log(obj.move)
+			//return;
 		}
 
-		intersects[i].object.position.lerp(new THREE.Vector3(-1.2, 0,intersects[i].object.position.z), 0.05);
+		
+		
 		//window.addEventListener('click', event => {
 		//	console.log("aaaaa")
 		//  });
-		return;
+		
 	}
-if (obj!= null)
-obj.position.lerp(new THREE.Vector3(0,0,obj.position.z), 0.05);
+
+	if (obj!= null){
+		obj.move = false;
+		console.log(obj.move)
+		//obj.position.lerp(new THREE.Vector3(-1.2, 0, obj.position.z), 0.05);
+	
+		for (let n = 0; n < obj.parent.children.length; n ++){
+			obj.parent.children[n].position.lerp(new THREE.Vector3(0,0,obj.parent.children[n].position.z), 0.05);
+		} 
+
+}
+
 	
 
 }
@@ -118,4 +149,15 @@ window.addEventListener( 'mousemove', onMouseMove, false );
 				
 			};
 
-			animate();
+			function checkFlag() {
+				if(records === undefined) {
+				   window.setTimeout(checkFlag, 100); /* this checks the flag every 100 milliseconds*/
+				} else {
+				  /* do something*/
+				  
+				  animate();
+				}
+			}
+			checkFlag();
+
+			
