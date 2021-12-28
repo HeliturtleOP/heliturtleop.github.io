@@ -78,7 +78,7 @@ var last;
 window.addEventListener('click', event => {
 	if (obj!= null){
 		console.log(obj.name)
-		window.location.href = "./" + obj.name + ".html";
+		window.location.href = "./" + obj.name;
 	}
   });
 
