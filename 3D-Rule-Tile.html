@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Demo: 3D Rule Tile</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Olivier Proulx</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Main Page</a></li>
+							<li class="active"><a href="generic.html">Demo: 3D Rule Tile</a></li>
+						</ul>
+						<!--<ul class="icons">
+							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul>-->
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>Demo:<br />
+									3D Rule Tile</h1>
+									<p>The Unity game engine conveniently provides a “rule tile” system for automatically setting
+										the correct orientation of tiles on a tilemap. My problem was that I wanted a type of rule
+										tile for 3D objects, which as far as I can tell was not a feature included in the engine.
+										The following is a detailed account of what I developed and how I developed it to solve
+										my little problem.
+									</p>
+								</header>
+								<div class="image main"><img src="images/pic01.jpg" alt="" /></div>
+								<p>Now to begin, I would like to highlight the fact that a 3D rule tile might be a slight misnomer for what I developed. What I wanted was a rule tile that uses 3D tiles instead of 2D ones. The system still operates on a 2D plane but I did have to develop my own way of correctly setting each tile myself.</p>
+								<p>The first thing I had to do was create a set of models for each possible tile permutation. I did this by drawing out the tiles pixel grid and subsequently making a model for each one in blender.</p>
+								<p>Then in the unity game engine, I put together a scriptable object. The purpose of a scriptable object is to be an object that can store variables, in my case I was storing the models for each permutation in this object so it would be easier to quickly switch between different tilesets.</p>
+								<p>After that I had to take a quick detour; I needed a system to place the tiles within my scene. I decided on using black and white images where white pixels represent a full tile, and black tiles represent empty ones. I also ended up making a system for randomly generating these black-and-white tile maps. My original system was based on an old blog post from the Vlambeer games studio before I ended up changing it to a system that used Perlin noise while clamping the values to black or white based on a threshold.</p>
+								<p>I also later added a way to transition between different tilesets on the tile map based on the shade of gray the pixels were on the unclamped Perlin noise.</p>
+							</section>
+
+					</div>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Olivier Proulx</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
